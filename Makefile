@@ -1,5 +1,4 @@
-#id:324207935
-email:shbabkoff123@gmail.com
+#id:324207935 email:shbabkoff123@gmail.com
 
 CXX= g++
 CXXFLAGS=-std=c++11 
