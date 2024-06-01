@@ -16,7 +16,7 @@ namespace Algorithms
 {
    
 
-    bool isConnectedHelper(const vector<vector<int>>& graph, size_t node, vector<bool>& visited)
+    void isConnectedDFS(const vector<vector<int>>& graph, size_t node, vector<bool>& visited)
     {
         visited[node] = true;
 
@@ -24,10 +24,10 @@ namespace Algorithms
         {
             if (graph[node][i] != 0 && !visited[i])
             { // There is an edge and it has not been visited
-                isConnectedHelper(graph, i, visited);
+                isConnectedDFS(graph, i, visited);
             }
         }
-        return true;
+        
     }
 
     bool allVisited(const vector<bool>& visited)
@@ -42,19 +42,19 @@ namespace Algorithms
 
     bool isConnected(const ariel::Graph &g)
     {
-        size_t numVertices = static_cast<size_t>(g.getVerticesNum());
+        size_t numVertices = g.getVerticesNum();
         vector<bool> visited(numVertices, false);
 
        
         // start from the first vertex only for simplicity
-        isConnectedHelper(g.getAdjacenctMat(), 0, visited);
+        isConnectedDFS(g.getAdjacenctMat(), 0, visited);
 
         // Check if all vertices were visited
         return allVisited(visited);
     }
 
-    //uding DFS algorithm
-     bool isContainCycleHelper(const vector<vector<int>>& graph, size_t node, vector<bool>& visited,
+    //using DFS algorithm
+     bool isContainCycleDFS(const vector<vector<int>>& graph, size_t node, vector<bool>& visited,
              vector<bool>& recStack, vector<int>& parent, vector<int>& cycle, bool isDirected)
     {
         visited[node] = true;
@@ -67,7 +67,7 @@ namespace Algorithms
                 if (!visited[i])
                 {
                     parent[i] = static_cast<int>(node);
-                    if (isContainCycleHelper(graph, i, visited, recStack, parent, cycle, isDirected))
+                    if (isContainCycleDFS(graph, i, visited, recStack, parent, cycle, isDirected))
                     {
                         return true;
                     }
@@ -95,7 +95,7 @@ namespace Algorithms
 
     bool isContainsCycle(const ariel::Graph &g)
     {
-        size_t numVertices = static_cast<size_t>(g.getVerticesNum());
+        size_t numVertices =g.getVerticesNum();
         vector<bool> visited(numVertices, false);
         vector<bool> recStack(numVertices, false);
         vector<int> parent(numVertices, -1);
@@ -105,7 +105,7 @@ namespace Algorithms
         {
             if (!visited[i])
             {
-                if (isContainCycleHelper(g.getAdjacenctMat(), i, visited, recStack, parent, cycle, g.isDirected()))
+                if (isContainCycleDFS(g.getAdjacenctMat(), i, visited, recStack, parent, cycle, g.isDirected()))
                 {
                     cout << "The cycle is: ";
                     for (size_t j = 0; j < cycle.size(); j++)
@@ -132,17 +132,17 @@ namespace Algorithms
 
         vector<int> setA, setB;
 
-        for (size_t start = 0; start < n; ++start)
+        for (size_t i = 0; i < n; ++i)
         {
-            if (colors[start] != -1)
+            if (colors[i] != -1)
             {
                 continue; // Skip already colored nodes
             }
 
             queue<size_t> q;
-            q.push(start);
+            q.push(i);
             
-            colors[start] = 0; // Start with the first color
+            colors[i] = 0; // Start with the first color
 
             while (!q.empty())
             {
@@ -208,8 +208,8 @@ namespace Algorithms
         }
 
         int V = graph.getVerticesNum();
-        vector<int> distance(static_cast<size_t>(V), numeric_limits<int>::max()); 
-        vector<int> predecessor(static_cast<size_t>(V), -1);  
+        vector<int> distance(V, numeric_limits<int>::max()); 
+        vector<int> predecessor(V, -1);  
         distance[static_cast<size_t>(start)] = 0; 
 
         // Relaxation process over V-1 iterations
